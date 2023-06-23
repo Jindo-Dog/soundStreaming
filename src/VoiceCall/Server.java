@@ -46,7 +46,7 @@ public class Server {
         try {
             MulticastSocket multicastSocket = new MulticastSocket();
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
-            InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
+            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             multicastSocket.setNetworkInterface(networkInterface);
             multicastSocket.joinGroup(inetAddress);
 
