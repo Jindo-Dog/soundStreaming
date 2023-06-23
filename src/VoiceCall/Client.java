@@ -6,9 +6,7 @@ import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
+import java.net.*;
 
 public class Client {
 
@@ -42,8 +40,10 @@ public class Client {
     public Client() {
         System.out.println("UDP Multicast Time Client Started");
         try {
+            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             MulticastSocket multicastSocket = new MulticastSocket(9877);
             InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
+            multicastSocket.setNetworkInterface(networkInterface);
             multicastSocket.joinGroup(inetAddress);
 
             byte[] audioBuffer = new byte[10000];

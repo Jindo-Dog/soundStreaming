@@ -7,10 +7,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
+import java.net.*;
 import java.util.Date;
 
 public class Server {
@@ -48,7 +45,9 @@ public class Server {
     private void broadcastAudio() {
         try {
             MulticastSocket multicastSocket = new MulticastSocket();
+            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
+            multicastSocket.setNetworkInterface(networkInterface);
             multicastSocket.joinGroup(inetAddress);
 
             final byte audioBuffer[] = new byte[10000];
