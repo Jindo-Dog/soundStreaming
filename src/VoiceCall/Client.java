@@ -52,7 +52,7 @@ public class Client {
             while (true) {
                 multicastSocket.receive(packet);
 
-                try {
+                /*try {
                     byte audioData[]= packet.getData();
                     InputStream byteInputStream = new ByteArrayInputStream(audioData);
                     AudioFormat audioFormat = getAudioFormat();
@@ -65,7 +65,9 @@ public class Client {
                 } catch (Exception e) {
                     System.out.println(e);
                     System.exit(0);
-                }
+                }*/
+                String message = new String(packet.getData(), 0, packet.getLength());
+                System.out.println("Message from: " + packet.getAddress() + " Message: [" + message + "]");
             }
         } catch (IOException ex) {
             ex.printStackTrace();

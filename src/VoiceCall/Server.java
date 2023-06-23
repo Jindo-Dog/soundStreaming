@@ -52,12 +52,21 @@ public class Server {
             multicastSocket.joinGroup(inetAddress);
 
             final byte audioBuffer[] = new byte[10000];
+            byte[] data;
+
             while (true) {
                 int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
                 if (count > 0) {
-                    DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9786);
+                    /*DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9786);
+                    multicastSocket.send(packet);*/
+                    Thread.sleep(1000);
+                    String message = (new Date()).toString();
+                    System.out.println("Sending: [" + message + "]");
+                    data = message.getBytes();
+                    DatagramPacket packet = new DatagramPacket(data, message.length(), inetAddress, 9877);
                     multicastSocket.send(packet);
                 }
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
