@@ -39,12 +39,6 @@ public class Client {
         }
     }
 
-    /*public AudioUDPClient() {
-        System.out.println("Audio UDP Client Started");
-        initiateAudio();
-        System.out.println("Audio UDP Client Terminated");
-    }*/
-
     public Client() {
         System.out.println("UDP Multicast Time Client Started");
         try {
@@ -53,9 +47,9 @@ public class Client {
             multicastSocket.joinGroup(inetAddress);
 
             byte[] audioBuffer = new byte[10000];
+            DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
 
             while (true) {
-                DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
                 multicastSocket.receive(packet);
 
                 try {
@@ -72,9 +66,6 @@ public class Client {
                     System.out.println(e);
                     System.exit(0);
                 }
-
-                /*String message = new String(packet.getData(), 0, packet.getLength());
-                System.out.println("Message from: " + packet.getAddress() + " Message: [" + message + "]");*/
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -84,6 +75,6 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        new UDPMulticastClient();
+        new Client();
     }
 }

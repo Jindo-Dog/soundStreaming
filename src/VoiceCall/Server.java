@@ -16,12 +16,12 @@ import java.util.Date;
 public class Server {
     private TargetDataLine targetDataLine;
 
-    /*public AudioUDPServer() {
+    public Server() {
         System.out.println("Audio UDP Server Started");
         setupAudio();
         broadcastAudio();
         System.out.println("Audio UDP Server Terminated");
-    }*/
+    }
 
     private AudioFormat getAudioFormat() {
         float sampleRate = 16000F;
@@ -47,48 +47,31 @@ public class Server {
 
     private void broadcastAudio() {
         try {
-            DatagramSocket socket = new DatagramSocket(8000);
-            InetAddress inetAddress = InetAddress.getByName("127.0.0.1");
+            MulticastSocket multicastSocket = new MulticastSocket();
+            InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
+            multicastSocket.joinGroup(inetAddress);
+
             final byte audioBuffer[] = new byte[10000];
             while (true) {
                 int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
                 if (count > 0) {
                     DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9786);
-                    socket.send(packet);
+                    multicastSocket.send(packet);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    public Server() {
-        System.out.println("UDP Multicast Time Server Started");
-        try {
-            MulticastSocket multicastSocket = new MulticastSocket();
-            InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
-            multicastSocket.joinGroup(inetAddress);
-
-            byte[] data;
-            DatagramPacket packet;
-            while (true) {
-                Thread.sleep(1000);
-                String message = (new Date()).toString();
-                System.out.println("Sending: [" + message + "]");
-                data = message.getBytes();
-                packet = new DatagramPacket(data, message.length(), inetAddress, 9877);
-
-                multicastSocket.send(packet);
-            }
-        } catch (IOException | InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        System.out.println("UDP Multicast Time Server Terminated");
-    }
 
     public static void main(String args[]) {
-        new UDPMulticastServer();
+        new Server();
     }
 }
 
 
-// 클릭으로 통화방 종료
+/*
+ 클릭으로 통화방 종료
+ 접속 시 콘솔에 접속자 표시
+
+ */
