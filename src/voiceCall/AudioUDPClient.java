@@ -25,8 +25,7 @@ public class AudioUDPClient {
             DatagramSocket socket = new DatagramSocket(9786);
             byte[] audioBuffer = new byte[10000];
             while (true) {
-                DatagramPacket packet
-                        = new DatagramPacket(audioBuffer, audioBuffer.length);
+                DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
                 socket.receive(packet);
 //                System.out.println("RECEIVED: " + packet.getAddress().getHostAddress() + " " + packet.getPort());
                 try {
@@ -35,8 +34,7 @@ public class AudioUDPClient {
                     AudioFormat audioFormat = getAudioFormat();
                     audioInputStream = new AudioInputStream(byteInputStream, audioFormat,
                             audioData.length / audioFormat.getFrameSize());
-                    DataLine.Info dataLineInfo = new DataLine.Info(
-                            SourceDataLine.class, audioFormat);
+                    DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
                     sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
                     sourceDataLine.open(audioFormat);
                     sourceDataLine.start();

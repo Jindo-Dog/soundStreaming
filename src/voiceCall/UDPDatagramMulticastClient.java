@@ -22,7 +22,7 @@ public class UDPDatagramMulticastClient {
 
         System.out.println("Joined Multicast Group: " + key);
         System.out.println("Waiting for a  message...");
-        
+
         ByteBuffer buffer = ByteBuffer.allocate(1024);
         channel.receive(buffer);
 //        buffer.flip();
@@ -38,7 +38,7 @@ public class UDPDatagramMulticastClient {
             message.append((char) buffer.get());
         }
         System.out.println(message + "]");
-        
+
         key.drop();
     }
 }

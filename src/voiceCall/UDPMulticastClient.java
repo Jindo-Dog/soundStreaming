@@ -13,23 +13,22 @@ public class UDPMulticastClient {
             MulticastSocket multicastSocket = new MulticastSocket(9877);
             InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
             multicastSocket.joinGroup(inetAddress);
-            
+
             byte[] data = new byte[256];
             DatagramPacket packet = new DatagramPacket(data, data.length);
-            
+
             while (true) {
                 multicastSocket.receive(packet);
                 String message = new String(packet.getData(), 0, packet.getLength());
-                System.out.println("Message from: " + packet.getAddress() 
-                        + " Message: [" + message + "]");        
+                System.out.println("Message from: " + packet.getAddress() + " Message: [" + message + "]");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
+
         System.out.println("UDP Multicast Time Client Terminated");
     }
-    
+
     public static void main(String[] args) {
         new UDPMulticastClient();
     }

@@ -17,17 +17,13 @@ public class ChatClient {
             while (true) {
                 // Receive message
                 System.out.println("Waiting for message from the server ...");
-                System.out.println("Message: "
-                        + HelperMethods.receiveMessage(socketChannel));
-//                System.out.println("Message: " 
-//                        + HelperMethods.receiveFixedLengthMessage(
-//                                socketChannel));
+                System.out.println("Message: " + HelperMethods.receiveMessage(socketChannel));
+//              System.out.println("Message: " + HelperMethods.receiveFixedLengthMessage(socketChannel));
                 System.out.print("> ");
                 message = scanner.nextLine();
                 if (message.equalsIgnoreCase("quit")) {
                     HelperMethods.sendMessage(socketChannel, "Client terminating");
-//                HelperMethods.sendFixedLengthMessage(
-//                        socketChannel, "Client terminating");
+//                HelperMethods.sendFixedLengthMessage(socketChannel, "Client terminating");
                     break;
                 }
                 // Send message
@@ -36,9 +32,9 @@ public class ChatClient {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-        }        
+        }
     }
-    
+
     public static void main(String[] args) {
         new ChatClient();
     }

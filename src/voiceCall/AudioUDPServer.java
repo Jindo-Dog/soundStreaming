@@ -46,11 +46,9 @@ public class AudioUDPServer {
             InetAddress inetAddress = InetAddress.getByName("127.0.0.1");
             final byte audioBuffer[] = new byte[10000];
             while (true) {
-                int count = targetDataLine.read(
-                        audioBuffer, 0, audioBuffer.length);
+                int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
                 if (count > 0) {
-                    DatagramPacket packet = new DatagramPacket(
-                        audioBuffer, audioBuffer.length, inetAddress, 9786);
+                    DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9786);
                     socket.send(packet);
                 }
             }
