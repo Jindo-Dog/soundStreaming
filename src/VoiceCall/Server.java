@@ -1,0 +1,94 @@
+package VoiceCall;
+
+import baseCode.UDPMulticastServer;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.TargetDataLine;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.util.Date;
+
+public class Server {
+    private TargetDataLine targetDataLine;
+
+    /*public AudioUDPServer() {
+        System.out.println("Audio UDP Server Started");
+        setupAudio();
+        broadcastAudio();
+        System.out.println("Audio UDP Server Terminated");
+    }*/
+
+    private AudioFormat getAudioFormat() {
+        float sampleRate = 16000F;
+        int sampleSizeInBits = 16;
+        int channels = 1;
+        boolean signed = true;
+        boolean bigEndian = false;
+        return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+    }
+
+    private void setupAudio() {
+        try {
+            AudioFormat audioFormat = getAudioFormat();
+            DataLine.Info dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
+            targetDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
+            targetDataLine.open(audioFormat);
+            targetDataLine.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+    private void broadcastAudio() {
+        try {
+            DatagramSocket socket = new DatagramSocket(8000);
+            InetAddress inetAddress = InetAddress.getByName("127.0.0.1");
+            final byte audioBuffer[] = new byte[10000];
+            while (true) {
+                int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
+                if (count > 0) {
+                    DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9786);
+                    socket.send(packet);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public Server() {
+        System.out.println("UDP Multicast Time Server Started");
+        try {
+            MulticastSocket multicastSocket = new MulticastSocket();
+            InetAddress inetAddress = InetAddress.getByName("228.5.6.7");
+            multicastSocket.joinGroup(inetAddress);
+
+            byte[] data;
+            DatagramPacket packet;
+            while (true) {
+                Thread.sleep(1000);
+                String message = (new Date()).toString();
+                System.out.println("Sending: [" + message + "]");
+                data = message.getBytes();
+                packet = new DatagramPacket(data, message.length(), inetAddress, 9877);
+
+                multicastSocket.send(packet);
+            }
+        } catch (IOException | InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        System.out.println("UDP Multicast Time Server Terminated");
+    }
+
+    public static void main(String args[]) {
+        new UDPMulticastServer();
+    }
+}
+
+
+// 클릭으로 통화방 종료

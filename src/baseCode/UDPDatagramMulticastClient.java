@@ -1,4 +1,4 @@
-package voiceCall;
+package baseCode;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -12,7 +12,7 @@ public class UDPDatagramMulticastClient {
 
     public static void main(String[] args) throws Exception {
         System.setProperty("java.net.preferIPv6Stack", "true");
-        NetworkInterface networkInterface = NetworkInterface.getByName("eth1");
+        NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
         DatagramChannel channel = DatagramChannel.open()
                 .bind(new InetSocketAddress(9003))
                 .setOption(StandardSocketOptions.IP_MULTICAST_IF, networkInterface);
