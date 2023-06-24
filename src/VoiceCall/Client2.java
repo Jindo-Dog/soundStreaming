@@ -1,14 +1,15 @@
 package VoiceCall;
 
-import baseCode.UDPMulticastClient;
-
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
 
-public class Client {
+public class Client2 {
 
     AudioInputStream audioInputStream;
     SourceDataLine sourceDataLine;
@@ -66,6 +67,19 @@ public class Client {
             DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
 
             while (true) {
+                // 송수신 쓰레드 분리 필요
+
+                // 멀티캐스트 송신
+                try {
+                    int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
+                    if (count > 0) {
+                        multicastSocket.send(packet);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                    System.exit(0);
+                }
+
                 // 멀티캐스트 수신
                 multicastSocket.receive(packet);
                 try {
@@ -83,17 +97,6 @@ public class Client {
                     System.exit(0);
                 }
 
-                // 멀티캐스트 송신
-                try {
-                    int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
-                    if (count > 0) {
-                        multicastSocket.send(packet);
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
-                    System.exit(0);
-                }
-
                 /*String message = new String(packet.getData(), 0, packet.getLength());
                 System.out.println("Message from: " + packet.getAddress() + " Message: [" + message + "]");*/
             }
@@ -103,12 +106,12 @@ public class Client {
 
     }
 
-    public Client() {
+    public Client2() {
         setupAudio();
         transceiver();
     }
 
     public static void main(String[] args) {
-        new Client();
+        new Client2();
     }
 }

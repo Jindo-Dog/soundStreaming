@@ -2,15 +2,14 @@ package VoiceCall;
 
 import baseCode.UDPMulticastServer;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.*;
 import java.util.Date;
 
 public class Server {
+
+    AudioInputStream audioInputStream;
     private TargetDataLine targetDataLine;
 
     public Server() {
@@ -51,11 +50,12 @@ public class Server {
             multicastSocket.joinGroup(inetAddress);
 
             final byte audioBuffer[] = new byte[10000];
-            byte[] data;
+            //byte[] data;
 
             while (true) {
                 int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
                 if (count > 0) {
+                    // 오디오 멀티캐스트
                     DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9877);
                     multicastSocket.send(packet);
 
@@ -63,9 +63,8 @@ public class Server {
                     String message = (new Date()).toString();
                     System.out.println("Sending: [" + message + "]");
                     data = message.getBytes();
-                    DatagramPacket packet = new DatagramPacket(data, message.length(), inetAddress, 9877);*/
-
-                    multicastSocket.send(packet);
+                    DatagramPacket packet = new DatagramPacket(data, message.length(), inetAddress, 9877);
+                    multicastSocket.send(packet);*/
                 }
 
             }
