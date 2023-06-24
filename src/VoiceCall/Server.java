@@ -44,28 +44,28 @@ public class Server {
     private void broadcastAudio() {
         try {
             MulticastSocket multicastSocket = new MulticastSocket();
-            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
+            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
             InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             multicastSocket.setNetworkInterface(networkInterface);
             multicastSocket.joinGroup(inetAddress);
 
             final byte audioBuffer[] = new byte[10000];
-            //byte[] data;
+            byte[] data;
 
             while (true) {
-                int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
+                /*int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
                 if (count > 0) {
                     // 오디오 멀티캐스트
                     DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9877);
                     multicastSocket.send(packet);
+                }*/
 
-                    /*Thread.sleep(1000);
-                    String message = (new Date()).toString();
-                    System.out.println("Sending: [" + message + "]");
-                    data = message.getBytes();
-                    DatagramPacket packet = new DatagramPacket(data, message.length(), inetAddress, 9877);
-                    multicastSocket.send(packet);*/
-                }
+                Thread.sleep(1000);
+                String message = (new Date()).toString();
+                System.out.println("Sending: [" + message + "]");
+                data = message.getBytes();
+                DatagramPacket packet = new DatagramPacket(data, message.length(), inetAddress, 9877);
+                multicastSocket.send(packet);
 
             }
         } catch (Exception ex) {

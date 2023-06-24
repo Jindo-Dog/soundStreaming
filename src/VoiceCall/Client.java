@@ -94,7 +94,8 @@ public class Client {
                     System.exit(0);
                 }
 
-                /*String message = new String(packet.getData(), 0, packet.getLength());
+                /*multicastSocket.receive(packet);
+                String message = new String(packet.getData(), 0, packet.getLength());
                 System.out.println("Message from: " + packet.getAddress() + " Message: [" + message + "]");*/
             }
         } catch (IOException ex) {
