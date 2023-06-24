@@ -29,10 +29,15 @@ public class VoiceCallSendWorkerThread implements Runnable {
 
         try {
             // 멀티캐스트 IPv6 설정
+            // 네트워크 인터페이스 설정
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
+            // 멀티캐스트 소켓 설정
             MulticastSocket multicastSocket = new MulticastSocket(9877);
+            // IPv6 주소 설정
             InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+            // 소켓에 네트워크 인터페이스 지정
             multicastSocket.setNetworkInterface(networkInterface);
+            // 멀티캐스트 그룹에 조인
             multicastSocket.joinGroup(inetAddress);
 
             byte[] audioBuffer = new byte[10000];

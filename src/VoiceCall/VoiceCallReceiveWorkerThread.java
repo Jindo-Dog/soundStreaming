@@ -24,10 +24,15 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
 
         try {
             // 멀티캐스트 IPv6 설정
+            // 네트워크 인터페이스 설정
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
+            // 멀티캐스트 소켓 설정
             MulticastSocket multicastSocket = new MulticastSocket(9877);
+            // IPv6 주소 설정
             InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+            // 소켓에 네트워크 인터페이스 지정
             multicastSocket.setNetworkInterface(networkInterface);
+            // 멀티캐스트 그룹에 조인
             multicastSocket.joinGroup(inetAddress);
 
             // 패킷 설정
@@ -57,6 +62,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
         }
     }
 
+    // 오디오 형식 지정
     private AudioFormat getAudioFormat() {
         float sampleRate = 16000F;
         int sampleSizeInBits = 16;
@@ -66,6 +72,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
         return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
     }
 
+    // 음성 재생
     private void playAudio() {
         byte[] buffer = new byte[10000];
         try {
