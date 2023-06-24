@@ -68,6 +68,7 @@ public class VoiceCallSendWorkerThread implements Runnable {
 
     }
 
+    // 오디오 형식 지정
     private AudioFormat getAudioFormat() {
         float sampleRate = 16000F;
         int sampleSizeInBits = 16;
@@ -77,6 +78,7 @@ public class VoiceCallSendWorkerThread implements Runnable {
         return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
     }
 
+    // 음성 입력
     private void setupAudio() {
         try {
             AudioFormat audioFormat = getAudioFormat();

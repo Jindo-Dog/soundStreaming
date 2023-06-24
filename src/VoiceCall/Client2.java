@@ -12,28 +12,20 @@ public class Client2 {
 
     private void transceiver() {
 
-        try {
+        // 채팅을 위한 또다른 멀티캐스트
+        //
 
-            // 채팅을 위한 또다른 멀티캐스트
-            //
+        // 쓰레드풀 생성
+        ThreadPoolExecutor receiveExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+        ThreadPoolExecutor sendExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 
-            // 쓰레드풀 생성
-            ThreadPoolExecutor receiveExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-            ThreadPoolExecutor sendExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+        // 쓰레드 생성
+        VoiceCallReceiveWorkerThread receiveTask = new VoiceCallReceiveWorkerThread();
+        VoiceCallSendWorkerThread sendTask = new VoiceCallSendWorkerThread();
 
-            // 쓰레드 생성
-//            VoiceCallReceiveWorkerThread receiveTask = new VoiceCallReceiveWorkerThread(multicastSocket);
-//            VoiceCallSendWorkerThread sendTask = new VoiceCallSendWorkerThread(multicastSocket);
-            VoiceCallReceiveWorkerThread receiveTask = new VoiceCallReceiveWorkerThread();
-            VoiceCallSendWorkerThread sendTask = new VoiceCallSendWorkerThread();
-
-            //쓰레드 실행
-            receiveExecutor.execute(receiveTask);
-            sendExecutor.execute(sendTask);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        //쓰레드 실행
+        receiveExecutor.execute(receiveTask);
+        sendExecutor.execute(sendTask);
 
     }
 
