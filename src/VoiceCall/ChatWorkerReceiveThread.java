@@ -53,9 +53,7 @@ public class ChatWorkerReceiveThread implements Runnable {
                     String receiveMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
                     // 본인 패킷 드랍
-                    if (Objects.equals(receivePacket.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
-                        // 드랍
-                    } else {
+                    if (!Objects.equals(receivePacket.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
                         System.out.println("Message from: " + receivePacket.getAddress() + "\nMessage: " + receiveMessage);
                     }
 
