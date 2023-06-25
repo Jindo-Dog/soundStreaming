@@ -8,11 +8,6 @@ public class Client2 {
 
     private void transceiver() {
 
-        // 채팅을 위한 또다른 멀티캐스트
-        //
-        // 연결 전에 이름, 입력받아서 채팅에서 닉네임으로 활용
-        // 쓰레드 생성 전에 접속을 멀티캐스트로 notify
-
         // 접속 여부를 묻는 팝업
         if (JOptionPane.showConfirmDialog(null, "접속하시겠습니까?", "ALERT", JOptionPane.YES_NO_OPTION) == 0) {
 

@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.net.*;
 import java.text.NumberFormat;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,7 +38,9 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
             multicastSocket = new MulticastSocket(9871);
 //            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
-            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+//            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+            // IPv4 주소 설정
+            InetAddress inetAddress = InetAddress.getByName("239.127.127.127");
             // 소켓에 네트워크 인터페이스 지정
             multicastSocket.setNetworkInterface(networkInterface);
             // 멀티캐스트 그룹에 조인
@@ -52,14 +55,16 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
                 multicastSocket.receive(packet);
                 try {
                     byte audioData[] = packet.getData();
-                    InputStream byteInputStream = new ByteArrayInputStream(audioData);
-                    AudioFormat audioFormat = getAudioFormat();
-                    audioInputStream = new AudioInputStream(byteInputStream, audioFormat, audioData.length / audioFormat.getFrameSize());
-                    DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
-                    sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
-                    sourceDataLine.open(audioFormat);
-                    sourceDataLine.start();
-                    playAudio();
+                    if (!Objects.equals(packet.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
+                        InputStream byteInputStream = new ByteArrayInputStream(audioData);
+                        AudioFormat audioFormat = getAudioFormat();
+                        audioInputStream = new AudioInputStream(byteInputStream, audioFormat, audioData.length / audioFormat.getFrameSize());
+                        DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
+                        sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+                        sourceDataLine.open(audioFormat);
+                        sourceDataLine.start();
+                        playAudio();
+                    }
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -73,7 +78,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
     }
 
     // 쓰레드 종료
-    public void stop(){
+    public void stop() {
         running.set(false);
     }
 

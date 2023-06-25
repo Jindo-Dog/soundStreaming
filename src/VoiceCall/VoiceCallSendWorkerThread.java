@@ -41,7 +41,9 @@ public class VoiceCallSendWorkerThread implements Runnable {
             multicastSocket = new MulticastSocket(9871);
 //            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
-            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+//            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+            // IPv4 주소 설정
+            InetAddress inetAddress = InetAddress.getByName("239.127.127.127");
             // 소켓에 네트워크 인터페이스 지정
             multicastSocket.setNetworkInterface(networkInterface);
             // 멀티캐스트 그룹에 조인

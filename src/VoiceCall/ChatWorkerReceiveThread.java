@@ -3,6 +3,7 @@ package VoiceCall;
 import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
 import java.net.*;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,16 +35,13 @@ public class ChatWorkerReceiveThread implements Runnable {
             multicastSocket = new MulticastSocket(9872);
 //            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
-            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+//            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
+            // IPv4 주소 설정
+            InetAddress inetAddress = InetAddress.getByName("239.127.127.127");
             // 소켓에 네트워크 인터페이스 지정
             multicastSocket.setNetworkInterface(networkInterface);
             // 멀티캐스트 그룹에 조인
             multicastSocket.joinGroup(inetAddress);
-            // 본인 IP주소 확인
-//            InetAddress address = Inet6Address.getLocalHost();
-//            String hostAddress = address.getHostAddress().toString();
-//            String hostAddress = Inet6Address.getLocalHost().getHostAddress();
-            String hostAddress = Inet6Address.getLocalHost().getHostName();
 
             byte[] receiveBuffer = new byte[10000];
             DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length, inetAddress, 9872);
@@ -55,7 +53,7 @@ public class ChatWorkerReceiveThread implements Runnable {
                     String receiveMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
                     // 본인 패킷 드랍
-                    if (receivePacket.getAddress().toString() == hostAddress) {
+                    if (Objects.equals(receivePacket.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
                         // 드랍
                     } else {
                         System.out.println("Message from: " + receivePacket.getAddress() + "\nMessage: " + receiveMessage);
