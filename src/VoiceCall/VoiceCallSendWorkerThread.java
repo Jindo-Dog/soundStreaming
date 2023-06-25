@@ -11,10 +11,13 @@ import java.io.PrintStream;
 import java.net.*;
 import java.text.NumberFormat;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VoiceCallSendWorkerThread implements Runnable {
-//    private final MulticastSocket multicastSocket;
+    //    private final MulticastSocket multicastSocket;
+    private final AtomicBoolean running = new AtomicBoolean(false);
     private TargetDataLine targetDataLine;
+    MulticastSocket multicastSocket;
 
     /*public VoiceCallSendWorkerThread(MulticastSocket multicastSocket) {
         this.multicastSocket = multicastSocket;
@@ -25,14 +28,18 @@ public class VoiceCallSendWorkerThread implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Worker Thread Started");
+        System.out.println("VoiceCall Send Worker Thread Started");   // 추후 주석처리
 
         try {
+            running.set(true);
+
             // 멀티캐스트 IPv6 설정
             // 네트워크 인터페이스 설정
-            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
+            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
+//            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
-            MulticastSocket multicastSocket = new MulticastSocket(9877);
+            multicastSocket = new MulticastSocket(9871);
+//            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
             InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             // 소켓에 네트워크 인터페이스 지정
@@ -44,13 +51,13 @@ public class VoiceCallSendWorkerThread implements Runnable {
 
             setupAudio();
 
-            while (true) {
+            while (running.get()) {
                 // 멀티캐스트 송신
                 try {
                     int count = targetDataLine.read(audioBuffer, 0, audioBuffer.length);
 
                     if (count > 0) {
-                        DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9877);
+                        DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9871);
                         multicastSocket.send(packet);
                     }
                 } catch (Exception e) {
@@ -61,11 +68,13 @@ public class VoiceCallSendWorkerThread implements Runnable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        multicastSocket.close();
+        System.out.println("VoiceCall Send Worker Thread Stopped");   // 추후 주석처리
+    }
 
-
-//        clientSocket.close();
-//        System.out.println("Client Connection Terminated");
-
+    // 쓰레드 종료
+    public void stop() {
+        running.set(false);
     }
 
     // 오디오 형식 지정

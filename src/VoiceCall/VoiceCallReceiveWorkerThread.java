@@ -5,12 +5,16 @@ import java.io.*;
 import java.net.*;
 import java.text.NumberFormat;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VoiceCallReceiveWorkerThread implements Runnable {
 
 //    private final MulticastSocket clientSocket;
+
+    private final AtomicBoolean running = new AtomicBoolean(false);
     AudioInputStream audioInputStream;
     SourceDataLine sourceDataLine;
+    MulticastSocket multicastSocket;
 
     /*public VoiceCallReceiveWorkerThread(MulticastSocket clientSocket) {
         this.clientSocket = clientSocket;
@@ -20,14 +24,18 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Worker Thread Started");
+        System.out.println("VoiceCall Receive Worker Thread Started");   // 추후 주석처리
 
         try {
+            running.set(true);
+
             // 멀티캐스트 IPv6 설정
             // 네트워크 인터페이스 설정
-            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
+            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
+//            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
-            MulticastSocket multicastSocket = new MulticastSocket(9877);
+            multicastSocket = new MulticastSocket(9871);
+//            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
             InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             // 소켓에 네트워크 인터페이스 지정
@@ -37,9 +45,9 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
 
             // 패킷 설정
             byte[] audioBuffer = new byte[10000];
-            DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length);
+            DatagramPacket packet = new DatagramPacket(audioBuffer, audioBuffer.length, inetAddress, 9871);
 
-            while (true) {
+            while (running.get()) {
                 // 멀티캐스트 수신
                 multicastSocket.receive(packet);
                 try {
@@ -60,6 +68,13 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        multicastSocket.close();
+        System.out.println("VoiceCall Receive Worker Thread Stopped");   // 추후 주석처리
+    }
+
+    // 쓰레드 종료
+    public void stop(){
+        running.set(false);
     }
 
     // 오디오 형식 지정
