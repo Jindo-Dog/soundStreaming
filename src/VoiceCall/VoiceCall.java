@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class Client2 {
+public class VoiceCall {
 
     private void transceiver() {
 
@@ -52,11 +52,11 @@ public class Client2 {
 
     }
 
-    public Client2() {
+    public VoiceCall() {
         transceiver();
     }
 
     public static void main(String[] args) {
-        new Client2();
+        new VoiceCall();
     }
 }
