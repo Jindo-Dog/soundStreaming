@@ -35,7 +35,7 @@ public class VoiceCallSendWorkerThread implements Runnable {
 
             // 멀티캐스트 IPv6 설정
             // 네트워크 인터페이스 설정
-            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
+//            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
 //            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9871);
@@ -45,7 +45,7 @@ public class VoiceCallSendWorkerThread implements Runnable {
             // IPv4 주소 설정
             InetAddress inetAddress = InetAddress.getByName("239.127.127.127");
             // 소켓에 네트워크 인터페이스 지정
-            multicastSocket.setNetworkInterface(networkInterface);
+//            multicastSocket.setNetworkInterface(networkInterface);
             // 멀티캐스트 그룹에 조인
             multicastSocket.joinGroup(inetAddress);
 
