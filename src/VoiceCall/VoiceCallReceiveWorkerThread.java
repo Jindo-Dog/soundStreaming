@@ -24,7 +24,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("VoiceCall Receive Worker Thread Started");   // 추후 주석처리
+//        System.out.println("VoiceCall Receive Worker Thread Started");   // 추후 주석처리
 
         try {
             running.set(true);
@@ -69,7 +69,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
             ex.printStackTrace();
         }
         multicastSocket.close();
-        System.out.println("VoiceCall Receive Worker Thread Stopped");   // 추후 주석처리
+//        System.out.println("VoiceCall Receive Worker Thread Stopped");   // 추후 주석처리
     }
 
     // 쓰레드 종료
