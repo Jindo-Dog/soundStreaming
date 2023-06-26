@@ -7,14 +7,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChatReceiveWorkerThread implements Runnable {
-    //    private final MulticastSocket multicastSocket;
     private final AtomicBoolean running = new AtomicBoolean(false);
-    private TargetDataLine targetDataLine;
     MulticastSocket multicastSocket;
-
-    /*public VoiceCallSendWorkerThread(MulticastSocket multicastSocket) {
-        this.multicastSocket = multicastSocket;
-    }*/
 
     public ChatReceiveWorkerThread() {
     }
@@ -32,7 +26,6 @@ public class ChatReceiveWorkerThread implements Runnable {
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9872);
-//            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
 //            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             // IPv4 주소 설정
@@ -52,9 +45,9 @@ public class ChatReceiveWorkerThread implements Runnable {
                     String receiveMessage = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
                     // 본인 패킷 드랍
-                    if (!Objects.equals(receivePacket.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
+//                    if (!Objects.equals(receivePacket.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
                         System.out.println("Message from: " + receivePacket.getAddress() + "\nMessage: " + receiveMessage);
-                    }
+//                    }
 
                 } catch (Exception e) {
                     System.out.println(e);

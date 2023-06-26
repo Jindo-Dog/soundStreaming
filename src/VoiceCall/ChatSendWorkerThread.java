@@ -7,14 +7,8 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChatSendWorkerThread implements Runnable {
-    //    private final MulticastSocket multicastSocket;
     private final AtomicBoolean running = new AtomicBoolean(false);
-    private TargetDataLine targetDataLine;
     MulticastSocket multicastSocket;
-
-    /*public VoiceCallSendWorkerThread(MulticastSocket multicastSocket) {
-        this.multicastSocket = multicastSocket;
-    }*/
 
     public ChatSendWorkerThread() {
     }
@@ -32,7 +26,6 @@ public class ChatSendWorkerThread implements Runnable {
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9872);
-//            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
 //            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             // IPv4 주소 설정
@@ -45,8 +38,8 @@ public class ChatSendWorkerThread implements Runnable {
             String sendMessage;
             Scanner scanner = new Scanner(System.in);
 
-            byte[] sendBuffer = new byte[10000];
-            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, inetAddress, 9872);
+            byte[] sendBuffer;
+            DatagramPacket sendPacket;
 
             // 접속했음을 멀티캐스트로 알림
             String hostName = InetAddress.getLocalHost().getHostName();

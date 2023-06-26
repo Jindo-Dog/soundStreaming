@@ -9,17 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VoiceCallReceiveWorkerThread implements Runnable {
-
-//    private final MulticastSocket clientSocket;
-
     private final AtomicBoolean running = new AtomicBoolean(false);
     AudioInputStream audioInputStream;
     SourceDataLine sourceDataLine;
     MulticastSocket multicastSocket;
-
-    /*public VoiceCallReceiveWorkerThread(MulticastSocket clientSocket) {
-        this.clientSocket = clientSocket;
-    }*/
     public VoiceCallReceiveWorkerThread() {
     }
 
@@ -36,7 +29,6 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9871);
-//            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
 //            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             // IPv4 주소 설정
@@ -57,7 +49,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
                     byte audioData[] = packet.getData();
 
                     // 본인 패킷 드랍
-                    if (!Objects.equals(packet.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
+//                    if (!Objects.equals(packet.getAddress().toString(), "/" + InetAddress.getLocalHost().getHostAddress())) {
                         InputStream byteInputStream = new ByteArrayInputStream(audioData);
                         AudioFormat audioFormat = getAudioFormat();
                         audioInputStream = new AudioInputStream(byteInputStream, audioFormat, audioData.length / audioFormat.getFrameSize());
@@ -66,7 +58,7 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
                         sourceDataLine.open(audioFormat);
                         sourceDataLine.start();
                         playAudio();
-                    }
+//                    }
                 } catch (Exception e) {
                     System.out.println(e);
                 }

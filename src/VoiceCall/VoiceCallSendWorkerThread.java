@@ -14,14 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VoiceCallSendWorkerThread implements Runnable {
-    //    private final MulticastSocket multicastSocket;
     private final AtomicBoolean running = new AtomicBoolean(false);
     private TargetDataLine targetDataLine;
     MulticastSocket multicastSocket;
-
-    /*public VoiceCallSendWorkerThread(MulticastSocket multicastSocket) {
-        this.multicastSocket = multicastSocket;
-    }*/
 
     public VoiceCallSendWorkerThread() {
     }
@@ -39,7 +34,6 @@ public class VoiceCallSendWorkerThread implements Runnable {
             NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9871);
-//            multicastSocket = new MulticastSocket();
             // IPv6 주소 설정
 //            InetAddress inetAddress = InetAddress.getByName("FF01:0:0:0:0:0:0:FC");
             // IPv4 주소 설정
