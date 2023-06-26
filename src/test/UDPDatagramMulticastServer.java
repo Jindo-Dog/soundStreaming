@@ -68,6 +68,5 @@ public class UDPDatagramMulticastServer {
         } catch (SocketException ex) {
             ex.printStackTrace();
         }
-
     }
 }
