@@ -32,8 +32,8 @@ public class VoiceCallReceiveWorkerThread implements Runnable {
 
             // 멀티캐스트 IPv6 설정
             // 네트워크 인터페이스 설정
-            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
-//            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
+//            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
+            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9871);
 //            multicastSocket = new MulticastSocket();
