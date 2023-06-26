@@ -1,14 +1,12 @@
 package VoiceCall;
 
-import com.sun.net.httpserver.Request;
-
 import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ChatWorkerSendThread implements Runnable {
+public class ChatSendWorkerThread implements Runnable {
     //    private final MulticastSocket multicastSocket;
     private final AtomicBoolean running = new AtomicBoolean(false);
     private TargetDataLine targetDataLine;
@@ -18,7 +16,7 @@ public class ChatWorkerSendThread implements Runnable {
         this.multicastSocket = multicastSocket;
     }*/
 
-    public ChatWorkerSendThread() {
+    public ChatSendWorkerThread() {
     }
 
     @Override
@@ -30,7 +28,7 @@ public class ChatWorkerSendThread implements Runnable {
 
             // 멀티캐스트 IPv6 설정
             // 네트워크 인터페이스 설정
-//            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
+            NetworkInterface networkInterface = NetworkInterface.getByName("eth4");
 //            NetworkInterface networkInterface = NetworkInterface.getByName("wlan2");
             // 멀티캐스트 소켓 설정
             multicastSocket = new MulticastSocket(9872);
@@ -40,7 +38,7 @@ public class ChatWorkerSendThread implements Runnable {
             // IPv4 주소 설정
             InetAddress inetAddress = InetAddress.getByName("239.127.127.127");
             // 소켓에 네트워크 인터페이스 지정
-//            multicastSocket.setNetworkInterface(networkInterface);
+            multicastSocket.setNetworkInterface(networkInterface);
             // 멀티캐스트 그룹에 조인
             multicastSocket.joinGroup(inetAddress);
 
@@ -50,8 +48,8 @@ public class ChatWorkerSendThread implements Runnable {
             byte[] sendBuffer = new byte[10000];
             DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, inetAddress, 9872);
 
-            // 접속했음을 멀티캐스트
-            String hostName = Inet6Address.getLocalHost().getHostName();
+            // 접속했음을 멀티캐스트로 알림
+            String hostName = InetAddress.getLocalHost().getHostName();
             sendMessage = hostName + "에서 접속했습니다.";
             sendBuffer = sendMessage.getBytes();
             sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, inetAddress, 9872);
@@ -71,7 +69,7 @@ public class ChatWorkerSendThread implements Runnable {
                 }
             }
 
-            // 접속 종료를 멀티캐스트
+            // 접속 종료를 멀티캐스트로 알림
             sendMessage = hostName + "에서 접속을 종료했습니다.";
             sendBuffer = sendMessage.getBytes();
             sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, inetAddress, 9872);

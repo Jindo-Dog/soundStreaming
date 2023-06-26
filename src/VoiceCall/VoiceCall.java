@@ -20,8 +20,8 @@ public class VoiceCall {
             // 쓰레드 생성
             VoiceCallReceiveWorkerThread receiveTask = new VoiceCallReceiveWorkerThread();
             VoiceCallSendWorkerThread sendTask = new VoiceCallSendWorkerThread();
-            ChatWorkerReceiveThread chatReceiveTask = new ChatWorkerReceiveThread();
-            ChatWorkerSendThread chatSendTask = new ChatWorkerSendThread();
+            ChatReceiveWorkerThread chatReceiveTask = new ChatReceiveWorkerThread();
+            ChatSendWorkerThread chatSendTask = new ChatSendWorkerThread();
 
             //쓰레드 실행
             receiveExecutor.execute(receiveTask);
@@ -45,9 +45,8 @@ public class VoiceCall {
                 chatSendExecutor.shutdown();
             }
 
-        } else {
-            JOptionPane.showMessageDialog(null, "접속이 종료되었습니다", "ALERT", JOptionPane.WARNING_MESSAGE);
         }
+        JOptionPane.showMessageDialog(null, "접속이 종료되었습니다", "ALERT", JOptionPane.WARNING_MESSAGE);
 
 
     }
