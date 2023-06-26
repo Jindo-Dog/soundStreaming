@@ -1,9 +1,7 @@
 package VoiceCall;
 
-import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
 import java.net.*;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChatReceiveWorkerThread implements Runnable {
